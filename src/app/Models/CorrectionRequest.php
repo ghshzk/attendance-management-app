@@ -10,10 +10,10 @@ class CorrectionRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'new_clock_in',
-        'new_clock_out',
-        'new_break_start',
-        'ner_break_end',
+        'user_id',
+        'attendance_id',
+        'clock_in',
+        'clock_out',
         'remark',
         'status',
     ];
@@ -26,5 +26,10 @@ class CorrectionRequest extends Model
     public function attendance()
     {
         return $this->belongsTo(Attendance::class);
+    }
+
+    public function correctionBreakTimes()
+    {
+        return $this->hasMany(CorrectionBreakTime::class);
     }
 }

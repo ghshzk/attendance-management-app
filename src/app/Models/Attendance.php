@@ -10,12 +10,11 @@ class Attendance extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
+        'date',
         'clock_in',
         'clock_out',
-        'break_start',
-        'break_end',
-        'break_minutes',
-        'work_minutes',
+        'attendance_status_id',
         'remark',
     ];
 
@@ -24,8 +23,18 @@ class Attendance extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function correctionRequest()
+    public function breakTimes()
+    {
+        return $this->hasMany(BreakTime::class);
+    }
+
+    public function correctionRequests()
     {
         return $this->hasMany(CorrectionRequest::class);
+    }
+
+    public function attendanceStatus()
+    {
+        return $this->belongsTo(AttendanceStatus::class, 'attendance_status_id');
     }
 }
