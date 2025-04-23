@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AdminLoginController;
 
 
 /*
@@ -16,3 +18,12 @@ use App\Http\Controllers\AttendanceController;
 */
 
 Route::get('/attendance',[AttendanceController::class,'index']);
+
+
+Route::get('/admin/login',[AdminLoginController::class,'create']);
+Route::post('/admin/login',[AdminLoginController::class,'store']);
+Route::post('/admin/logout',[AdminLoginController::class,'destroy'])->name('admin.logout');
+
+Route::middleware('auth')->group(function(){
+    Route::get('/admin/attendance/list',[AttendanceController::class,'adminIndex']);
+});

@@ -10,4 +10,10 @@ class AttendanceController extends Controller
     {
         return view('attendance');
     }
+
+    public function adminIndex()
+    {
+        return view('admin.attendance_list');
+    }
+
 }

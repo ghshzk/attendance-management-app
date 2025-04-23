@@ -14,40 +14,48 @@
     <div class="app">
         <header class="header">
             <a href="{{ url('/') }}">
-                <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="サイトロゴ">
+                <img class="header-logo" src="{{ asset('img/logo.svg') }}" alt="ロゴ">
             </a>
 
             @if(!in_array(Route::currentRouteName(),['login','register']))
-                <div class="header-search-form">
-                    <form class="header-search-form__form" action="{{ route('search') }}" method="get">
-                        @csrf
-                        <input class="header-search-form__input" type="text" name="keyword" value="{{ request('keyword') }}" placeholder="なにをお探しですか？">
-                    </form>
-                </div>
-
                 <nav class="header-nav">
                     <ul class="header-nav__list">
-                        <li class="header-nav__item">
-                            @auth
-                            <form action="/logout" method="post">
-                                @csrf
-                                <input class="header-nav__link" type="submit" value="ログアウト">
-                            </form>
+                        @auth
+                            {{-- 管理者用 --}}
+                            @if(Auth::user()->role === 'admin')
+                                <li class="header-nav__item">
+                                    <a class="header-nav__link" href="/">勤怠一覧</a>
+                                </li>
+                                <li class="header-nav__item">
+                                    <a class="header-nav__link" href="/">スタッフ一覧</a>
+                                </li>
+                                <li class="header-nav__item">
+                                    <a class="header-nav__link" href="/">申請一覧</a>
+                                </li>
                             @else
-                            <a class="header-nav__link" href="/login">ログイン</a>
-                            @endauth
-                        </li>
-                        <li class="header-nav__item">
-                            <a class="header-nav__link" href="/mypage">マイページ</a>
-                        </li>
-                        <li class="header-nav__item">
-                            <a class="header-nav__link header-nav__link-sell" href="/sell">出品</a>
-                        </li>
+                            {{-- 一般ユーザー用 --}}
+                                <li class="header-nav__item">
+                                    <a class="header-nav__link" href="/">勤怠</a>
+                                </li>
+                                <li class="header-nav__item">
+                                    <a class="header-nav__link" href="/">勤怠一覧</a>
+                                </li>
+                                <li class="header-nav__item">
+                                    <a class="header-nav__link" href="/">申請</a>
+                                </li>
+                            @endif
+                            <li class="header-nav__item">
+                                <form action="{{ Auth::user()->role === 'admin' ? route('admin.logout') : route('logout') }}" method="post">
+                                    @csrf
+                                    <input class="header-nav__link" type="submit" value="ログアウト">
+                                </form>
+                            </li>
+                        @endauth
                     </ul>
                 </nav>
             @endif
         </header>
-        
+
         <div class="content">
             @yield('content')
         </div>

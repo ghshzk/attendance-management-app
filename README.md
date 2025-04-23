@@ -15,8 +15,14 @@
 
 ## テストアカウント
 #### 一般ユーザー
+name: 山田 太郎\
+email: user1@example.com\
+password: password
 
 #### 管理者ユーザー
+name: 管理者 ユーザー\
+email: admin@example.com\
+password: adminpass
 
 ## URL
 - 開発環境: http://localhost/
