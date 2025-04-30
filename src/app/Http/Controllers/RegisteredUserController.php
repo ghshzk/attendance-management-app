@@ -9,10 +9,11 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Fortify\Contracts\RegisterResponse;
+//use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\RegisterViewResponse;
 use Laravel\Fortify\Fortify;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Responses\RegisterResponse;
 
 class RegisteredUserController extends Controller
 {
@@ -25,15 +26,15 @@ class RegisteredUserController extends Controller
             ]);
         }
 
-        //$validated = $request->validated();
+        $validated = $request->validated();
 
-        //event(new Registered($user = $creator->create($validated)));
-        event(new Registered($user = $creator->create($request->all())));
+        event(new Registered($user = $creator->create($validated)));
+        //event(new Registered($user = $creator->create($request->all())));
 
         //未認証ユーザー情報をセッションに保存
-        //session(['unauthenticated_user' => $user]);
+        session(['unauthenticated_user' => $user]);
 
-        $this->guard->login($user); //メール認証が完了していないユーザーをログインさせないため削除
+        //$this->guard->login($user); //メール認証が完了していないユーザーをログインさせないため削除
 
         return app(RegisterResponse::class);
     }
