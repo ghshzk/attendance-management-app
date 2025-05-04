@@ -20,8 +20,6 @@ use App\Http\Requests\EmailVerificationRequest;
 |
 */
 
-Route::get('/attendance',[AttendanceController::class,'index']);
-
 Route::post('/register',[RegisteredUserController::class,'store']);
 
 Route::get('/email/verify', function () {
@@ -47,3 +45,5 @@ Route::post('/admin/logout',[AdminLoginController::class,'destroy'])->name('admi
 Route::middleware('auth')->group(function(){
     Route::get('/admin/attendance/list',[AttendanceController::class,'adminIndex']);
 });
+
+Route::get('/attendance',[AttendanceController::class,'index']);
