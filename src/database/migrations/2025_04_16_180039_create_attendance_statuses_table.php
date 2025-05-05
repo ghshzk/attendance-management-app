@@ -15,7 +15,7 @@ class CreateAttendanceStatusesTable extends Migration
     {
         Schema::create('attendance_statuses', function (Blueprint $table) {
             $table->id();
-            $table->enum('status',['pending','working','break','clocked_out'])->default('pending');
+            $table->string('status');
             $table->timestamps();
         });
     }

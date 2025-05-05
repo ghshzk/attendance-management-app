@@ -45,5 +45,11 @@ Route::post('/admin/logout',[AdminLoginController::class,'destroy'])->name('admi
 Route::middleware('auth')->group(function(){
     Route::get('/admin/attendance/list',[AttendanceController::class,'adminIndex']);
 });
+Route::middleware(['auth'])->group(function(){
+    Route::get('/attendance',[AttendanceController::class,'create'])->name('attendance.create');
+    Route::post('/attendance/clock_in',[AttendanceController::class,'clockIn'])->name('attendance.clockIn');
+    Route::post('/attendance/break_start',[AttendanceController::class,'breakStart'])->name('attendance.breakStart');
+    Route::post('/attendance/break_end',[AttendanceController::class,'breakEnd'])->name('attendance.breakEnd');
+    Route::post('/attendance/clock_put',[AttendanceController::class,'clockOut'])->name('attendance.clockOut');
+});
 
-Route::get('/attendance',[AttendanceController::class,'index']);
