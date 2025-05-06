@@ -7,13 +7,13 @@
 @section('content')
 <div class="attendance-container">
     <div class="attendance-status">
-        @if ($status === 'pending')
+        @if ($status === '勤務外')
             <p class="status_label">勤務外</p>
-        @elseif ($status === 'working')
+        @elseif ($status === '出勤中')
             <p class="status_label">出勤中</p>
-        @elseif ($status === 'break')
+        @elseif ($status === '休憩中')
             <p class="status_label">休憩中</p>
-        @elseif ($status === 'clocked_out')
+        @elseif ($status === '退勤済')
             <p class="status_label">退勤済</p>
         @endif
     </div>
@@ -24,26 +24,26 @@
 
     <h2 class="attendance-time" id="clock">00:00</h2>
 
-    @if ($status === 'pending')
-        <form class="attendance-form" action="" method="post">
+    @if ($status === '勤務外')
+        <form class="attendance-form" action="{{ route('attendance.clockIn') }}" method="post">
             @csrf
             <button class="attendance-btn" type="submit">出勤</button>
         </form>
-    @elseif ($status === 'working')
-        <form class="attendance-form" action="" method="post">
+    @elseif ($status === '出勤中')
+        <form class="attendance-form" action="{{ route('attendance.clockOut') }}" method="post">
             @csrf
             <button class="attendance-btn">退勤</button>
         </form>
-        <form class="attendance-form" action="" method="post">
+        <form class="attendance-form" action="{{ route('attendance.breakStart') }}" method="post">
             @csrf
             <button class="break-btn">休憩入</button>
         </form>
-    @elseif ($status === 'break')
-        <form class="attendance-form" action="" method="post">
+    @elseif ($status === '休憩中')
+        <form class="attendance-form" action="{{ route('attendance.breakEnd') }}" method="post">
             @csrf
             <button class="break-btn">休憩戻</button>
         </form>
-    @elseif ($status === 'clocked_out')
+    @elseif ($status === '退勤済')
         <p class="attendance-message">お疲れ様でした。</p>
     @endif
 </div>
