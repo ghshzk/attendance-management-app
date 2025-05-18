@@ -1,0 +1,20 @@
+.allow-left-img {
+    width: 20px;
+    height: 15px;
+}
+
+.allow-right-img {
+    width: 20px;
+    height: 15px;
+    transform: rotate(180deg);
+}
+
+.calendar-img {
+    width: 25px;
+    height: 25px;
+}
+
+.btn {
+    background: none;
+    border: none;
+}
