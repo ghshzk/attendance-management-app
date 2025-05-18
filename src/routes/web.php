@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceListController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Requests\EmailVerificationRequest;
@@ -51,5 +52,9 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/attendance/break_start',[AttendanceController::class,'breakStart'])->name('attendance.breakStart');
     Route::post('/attendance/break_end',[AttendanceController::class,'breakEnd'])->name('attendance.breakEnd');
     Route::post('/attendance/clock_put',[AttendanceController::class,'clockOut'])->name('attendance.clockOut');
+
+    Route::get('/attendance/list', [AttendanceListController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/{id}', [AttendanceListController::class, 'show'])->name('attendance.show');
+    Route::post('/attendance/{id}', [AttendanceListController::class, 'update'])->name('attendance.update');
 });
 

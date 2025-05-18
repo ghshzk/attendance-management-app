@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Attendance;
+use App\Models\BreakTime;
+use App\Models\CorrectionRequest;
+use App\Models\CorrectionBreakTime;
+use App\Http\Requests\AttendanceRequest;
+use Carbon\Carbon;
+
+
+class AttendanceListController extends Controller
+{
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+        $month = $request->input('month') ? Carbon::parse($request->input('month')) : Carbon::now();
+
+        $attendances = Attendance::with('breakTimes')
+                        ->where('user_id', $user->id) //ログインユーザーのデータのみ取得
+                        ->whereYear('date', $month->year)
+                        ->whereMonth('date', $month->month) //月の絞り込み
+                        ->orderBy('date') //日付順で表示
+                        ->get();
+
+        $attendances = $attendances->map(function ($attendance) {
+            if ($attendance->clock_in && $attendance->clock_out) {
+                $workTime = Carbon::parse($attendance->clock_in)
+                            ->diffInMinutes(Carbon::parse($attendance->clock_out));
+            } else {
+                $workTime = null;
+            }
+
+            $breakTime = $attendance->breakTimes->reduce(function ($carry, $break) {
+                if ($break->break_start && $break->break_end) {
+                    return $carry + Carbon::parse($break->break_start)
+                    ->diffInMinutes(Carbon::parse($break->break_end));
+                }
+                return $carry;
+            }, 0);
+
+            $actualWorkTime = $workTime !== null ? $workTime - $breakTime : null;
+
+            $attendance->work_time = $actualWorkTime !== null
+                ? sprintf('%d:%02d', floor($actualWorkTime / 60), $actualWorkTime % 60) : null;
+
+            $attendance->break_time = sprintf('%d:%02d', floor($breakTime / 60), $breakTime % 60);
+
+            return $attendance;
+        });
+
+        return view('attendance_list', compact('month','attendances'));
+    }
+
+    public function show($id) {
+        $attendance = Attendance::with('user', 'breakTimes', 'correctionRequests.correctionBreakTimes')->findOrFail($id);
+
+        $pendingCorrection = $attendance->correctionRequests()->where('status', 'pending')->latest()->first();
+
+        return view('attendance_show', compact('attendance', 'pendingCorrection'));
+    }
+
+    public function update(AttendanceRequest $request, $id)
+    {
+        $validated = $request->validated();
+
+        $attendance = Attendance::with('breakTimes')->findOrFail($id);
+
+        $correctionRequest = CorrectionRequest::create([
+            'user_id' => auth()->id(),
+            'attendance_id' => $attendance->id,
+            'clock_in' => $validated['clock_in'],
+            'clock_out' => $validated['clock_out'],
+            'remark' => $validated['remark'],
+            'status' => 'pending',
+        ]);
+
+        if (!empty($validated['break_start']) && !empty($validated['break_end'])) {
+            foreach ($validated['break_start'] as $index => $start) {
+                if (empty($start) && empty($validated['break_end'][$index])) {
+                    continue;
+                }
+
+                CorrectionBreakTime::create([
+                    'correction_request_id' => $correctionRequest->id,
+                    'break_time_id' => $attendance->breakTimes[$index]->id ?? null,
+                    'break_start' => $start,
+                    'break_end' => $validated['break_end'][$index],
+                ]);
+            }
+        }
+        return redirect()->route('attendance.show', $attendance->id);
+    }
+}

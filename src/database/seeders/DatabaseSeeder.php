@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Attendance;
+use App\Models\BreakTime;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +20,11 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             AttendanceStatusesTableSeeder::class,
         ]);
+
+        $attendance = Attendance::factory(10)->create();
+
+        foreach ($attendance as $attendance) {
+            BreakTime::factory(1)->forAttendance($attendance)->create();
+        }
     }
 }
