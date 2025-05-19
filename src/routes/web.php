@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceListController;
+use App\Http\Controllers\CorrectionRequestController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Requests\EmailVerificationRequest;
@@ -56,5 +57,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/attendance/list', [AttendanceListController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/{id}', [AttendanceListController::class, 'show'])->name('attendance.show');
     Route::post('/attendance/{id}', [AttendanceListController::class, 'update'])->name('attendance.update');
+
+    Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index'])->name('correction.index');
 });
 
