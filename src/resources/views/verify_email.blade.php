@@ -14,7 +14,7 @@
     </div>
 
     <div class="verification__button">
-        <a href="{{ route('verification.notice') }}" class="verification__button">
+        <a href="https://mailtrap.io/home" class="verification__button">
             認証はこちらから
         </a>
     </div>
