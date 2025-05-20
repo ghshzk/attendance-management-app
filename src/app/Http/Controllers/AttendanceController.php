@@ -28,7 +28,7 @@ class AttendanceController extends Controller
             } elseif ($attendance->breakTimes()->whereNull('break_end')->exists()) {
                 $status = '休憩中';
             } elseif ($attendance->clock_in) {
-                $status = '出勤中';
+                $status = '勤務中';
             }
         }
 

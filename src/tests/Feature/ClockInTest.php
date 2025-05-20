@@ -47,7 +47,7 @@ class ClockInTest extends TestCase
 
         $response = $this->get('/attendance');
         $response->assertStatus(200);
-        $response->assertSee('出勤中');
+        $response->assertSee('勤務中');
     }
 
     //出勤は1日1回のみできる
@@ -66,5 +66,21 @@ class ClockInTest extends TestCase
         $response->assertDontSee('出勤');
     }
 
-    //出勤時刻が管理画面で確認できる、一旦保留
+    //出勤時刻が管理画面で確認できる、内容確認中一旦保留
+    public function test_clock_in_time_attendance_list()
+    {
+        $this->actingAs($this->user)->get('/attendance');
+        $this->post(route('attendance.clockIn'));
+
+        $attendance = Attendance::where('user_id', $this->user->id)
+                        ->where('date', Carbon::today()->format('Y-m-d'))
+                        ->first();
+
+        $clockIn = Carbon::parse($attendance->clock_in)->format('H:i');
+
+        $response = $this->get(route('attendance.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee($clockIn);
+    }
 }

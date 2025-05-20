@@ -9,8 +9,8 @@
     <div class="attendance-status">
         @if ($status === '勤務外')
             <p class="status_label">勤務外</p>
-        @elseif ($status === '出勤中')
-            <p class="status_label">出勤中</p>
+        @elseif ($status === '勤務中')
+            <p class="status_label">勤務中</p>
         @elseif ($status === '休憩中')
             <p class="status_label">休憩中</p>
         @elseif ($status === '退勤済')
@@ -29,7 +29,7 @@
             @csrf
             <button class="attendance-btn" type="submit">出勤</button>
         </form>
-    @elseif ($status === '出勤中')
+    @elseif ($status === '勤務中')
         <form class="attendance-form" action="{{ route('attendance.clockOut') }}" method="post">
             @csrf
             <button class="attendance-btn">退勤</button>

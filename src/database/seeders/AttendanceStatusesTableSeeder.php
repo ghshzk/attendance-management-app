@@ -16,7 +16,7 @@ class AttendanceStatusesTableSeeder extends Seeder
     {
         $params = [
             '勤務外',
-            '出勤中',
+            '勤務中',
             '休憩中',
             '退勤済'
         ];

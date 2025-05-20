@@ -26,7 +26,7 @@ class BreakTimeFactory extends Factory
     {
         return $this->state(function (array $attributes) use ($attendance) {
             $breakStart = Carbon::parse($attendance->date)->setTime(rand(12,14), rand(0,59));
-            $breakEnd = (clone $breakStart)->addMinutes(rand(30, 60));
+            $breakEnd = (clone $breakStart)->addMinutes(rand(50, 60)); //50~60分程度の休憩
 
             return [
                 'attendance_id' => $attendance->id,
