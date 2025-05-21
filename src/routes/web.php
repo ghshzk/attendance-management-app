@@ -28,6 +28,7 @@ Route::get('/email/verify', function () {
     return view('verify_email');
 })->name('verification.notice');
 
+//メール認証リンクの再送
 Route::post('/email/verification-notification', function (Request $request) {
     session()->get('unauthenticated_user')->sendEmailVerificationNotification();
     session()->put('resent', true);

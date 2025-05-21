@@ -8,4 +8,32 @@ body{
     height: 80px;
     padding: 0 30px;
     background-color: #000;
+    width: 100%;
+    color: #fff;
+}
+
+.header-nav {
+    width: 100%;
+    justify-items: end;
+    color: #fff;
+}
+
+.header-nav-item {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.header-nav-list {
+    display: flex;
+    justify-content: center;
+}
+
+.header-nav-link {
+    text-decoration: none;
+}
+
+.header-nav-btn {
+    border: none;
+    background: none;
 }
