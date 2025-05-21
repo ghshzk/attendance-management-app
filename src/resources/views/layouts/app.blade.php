@@ -19,35 +19,35 @@
 
             @if(!in_array(Route::currentRouteName(),['login','register']))
                 <nav class="header-nav">
-                    <ul class="header-nav__list">
+                    <ul class="header-nav-list">
                         @auth
                             {{-- 管理者用 --}}
                             @if(Auth::user()->role === 'admin')
-                                <li class="header-nav__item">
-                                    <a class="header-nav__link" href="/">勤怠一覧</a>
+                                <li class="header-nav-item">
+                                    <a class="header-nav-link" href="/">勤怠一覧</a>
                                 </li>
-                                <li class="header-nav__item">
-                                    <a class="header-nav__link" href="/">スタッフ一覧</a>
+                                <li class="header-nav-item">
+                                    <a class="header-nav-link" href="/">スタッフ一覧</a>
                                 </li>
-                                <li class="header-nav__item">
-                                    <a class="header-nav__link" href="/">申請一覧</a>
+                                <li class="header-nav-item">
+                                    <a class="header-nav-link" href="/">申請一覧</a>
                                 </li>
                             @else
                             {{-- 一般ユーザー用 --}}
-                                <li class="header-nav__item">
-                                    <a class="header-nav__link" href="/attendance">勤怠</a>
+                                <li class="header-nav-item">
+                                    <a class="header-nav-link" href="/attendance">勤怠</a>
                                 </li>
-                                <li class="header-nav__item">
-                                    <a class="header-nav__link" href="/attendance/list">勤怠一覧</a>
+                                <li class="header-nav-item">
+                                    <a class="header-nav-link" href="/attendance/list">勤怠一覧</a>
                                 </li>
-                                <li class="header-nav__item">
-                                    <a class="header-nav__link" href="/stamp_correction_request/list">申請</a>
+                                <li class="header-nav-item">
+                                    <a class="header-nav-link" href="/stamp_correction_request/list">申請</a>
                                 </li>
                             @endif
-                            <li class="header-nav__item">
+                            <li class="header-nav-item">
                                 <form action="{{ Auth::user()->role === 'admin' ? route('admin.logout') : route('logout') }}" method="post">
                                     @csrf
-                                    <input class="header-nav__link" type="submit" value="ログアウト">
+                                    <input class="header-nav-btn" type="submit" value="ログアウト">
                                 </form>
                             </li>
                         @endauth
