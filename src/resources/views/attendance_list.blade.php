@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('css')
+@section('css') @section('body_class', 'bg-gray')
 <link rel="stylesheet" href="{{ asset('css/attendance-list.css') }}">
 @endsection
 
@@ -20,7 +20,7 @@
             <string class="month-btn-label">{{ $month->format('Y/m') }}</string>
         </div>
 
-        <form action="{{ route('attendance.index') }}" method="get">
+        <form class="form" action="{{ route('attendance.index') }}" method="get">
             <input type="month" name="month" id="monthPicker" value="{{ $month->format('Y/m') }}" style="display: none;" onchange="this.form.submit()">
         </form>
 
@@ -41,7 +41,7 @@
                 <th class="attendance-table__header">詳細</th>
             </tr>
             @foreach($attendances as $attendance)
-            <tr>
+            <tr class="attendance-table__row">
                 <td class="attendance-table__data">
                     {{ \Carbon\Carbon::parse($attendance->date)->format('m/d') }}({{ ['日','月','火','水','木','金','土'][\Carbon\Carbon::parse($attendance->date)->dayOfWeek] }})
                 </td>

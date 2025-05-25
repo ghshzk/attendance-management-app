@@ -10,12 +10,10 @@
     @yield('css')
 </head>
 
-<body>
+<body class="@yield('body_class')">
     <div class="app">
         <header class="header">
-            <a href="{{ url('/') }}">
-                <img class="header-logo" src="{{ asset('img/logo.svg') }}" alt="ロゴ">
-            </a>
+            <img class="header-logo" src="{{ asset('img/logo.svg') }}" alt="ロゴ">
 
             @if(!in_array(Route::currentRouteName(),['login','register']))
                 <nav class="header-nav">

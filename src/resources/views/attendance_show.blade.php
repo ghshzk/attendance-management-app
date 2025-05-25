@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('css')
+@section('css') @section('body_class', 'bg-gray')
 <link rel="stylesheet" href="{{ asset('css/attendance-show.css') }}">
 @endsection
 
@@ -13,14 +13,21 @@
             <table class="detail-table__inner">
                 <tr class="detail-table__row">
                     <th class="detail-table__header">名前</th>
-                    <td class="detail-table__data">{{ $attendance->user->name }}</td>
+                    <td class="detail-table__data">
+                        <span class="name">
+                            {{ $attendance->user->name }}</td>
+                        </span>
                 </tr>
 
                 <tr class="detail-table__row">
                     <th class="detail-table__header">日付</th>
                     <td class="detail-table__data">
-                        <span class="year">{{ \Carbon\Carbon::parse($attendance->date)->format('Y年') }}</span>
-                        <span class="month-day">{{ \Carbon\Carbon::parse($attendance->date)->format('n月j日') }}</span>
+                        <span class="year">
+                            {{ \Carbon\Carbon::parse($attendance->date)->format('Y年') }}
+                        </span>
+                        <span class="month-day">
+                            {{ \Carbon\Carbon::parse($attendance->date)->format('n月j日') }}
+                        </span>
                     </td>
                 </tr>
 
@@ -28,13 +35,17 @@
                     <th class="detail-table__header">出勤・退勤</th>
                     <td class="detail-table__data">
                         @if($pendingCorrection)
-                            {{ $pendingCorrection->clock_in ? \Carbon\Carbon::parse($pendingCorrection->clock_in)->format('H:i') : '' }}
+                            <span class="clock-in">
+                                {{ $pendingCorrection->clock_in ? \Carbon\Carbon::parse($pendingCorrection->clock_in)->format('H:i') : '' }}
+                            </span>
                             〜
-                            {{ $pendingCorrection->clock_out ? \Carbon\Carbon::parse($pendingCorrection->clock_out)->format('H:i') : '' }}
+                            <span class="clock-out">
+                                {{ $pendingCorrection->clock_out ? \Carbon\Carbon::parse($pendingCorrection->clock_out)->format('H:i') : '' }}
+                            </span>
                         @else
-                            <input class="detail-table__input" type="time" name="clock_in" value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}">
+                            <input class="detail-table__input input-clock-in" type="time" name="clock_in" value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}">
                             〜
-                            <input class="detail-table__input" type="time" name="clock_out" value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
+                            <input class="detail-table__input input-clock-out" type="time" name="clock_out" value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}">
                             <div class="error-message">
                                 @error('clock_in')
                                 {{ $message }}
@@ -53,9 +64,13 @@
                         <tr class="detail-table__row">
                             <th class="detail-table__header">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                             <td class="detail-table__data">
-                                {{ $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '-' }}
+                                <span class="break-start">
+                                    {{ $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '-' }}
+                                </span>
                                 〜
-                                {{ $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '-' }}
+                                <span class="break-end">
+                                    {{ $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '-' }}
+                                </span>
                             </td>
                         </tr>
                     @endforeach
@@ -64,9 +79,9 @@
                         <tr class="detail-table__row">
                             <th class="detail-table__header">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                             <td class="detail-table__data">
-                                <input class="break-time-table__input" type="time" name="break_start[{{ $index }}]" value="{{ $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '' }}">
+                                <input class="detail-table__input input-break-start" type="time" name="break_start[{{ $index }}]" value="{{ old('break_start.' . $index, $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '') }}">
                                 〜
-                                <input class="break-time-table__input" type="time" name="break_end[{{ $index }}]" value="{{ $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '' }}">
+                                <input class="detail-table__input input-break-end" type="time" name="break_end[{{ $index }}]" value="{{ old('break_end.' . $index, $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}">
                                 <div class="error-message">
                                     @error("break_start.$index")
                                     {{ $message }}
@@ -89,9 +104,9 @@
                     <tr class="detail-table__row">
                         <th class="detail-table__header">休憩{{ count($attendance->breakTimes) + 1 }}</th>
                         <td class="detail-table__data">
-                            <input class="detail-table__input" type="time" name="break_start[{{ $nextIndex }}]">
+                            <input class="detail-table__input input-break-start" type="time" name="break_start[{{ $nextIndex }}]" value="{{ old('break_start.' . $nextIndex) }}">
                             〜
-                            <input class="detail-table__input" type="time" name="break_end[{{ $nextIndex }}]">
+                            <input class="detail-table__input input-break-end" type="time" name="break_end[{{ $nextIndex }}]" value="{{ old('break_end.' . $nextIndex) }}">
                             <div class="error-message">
                                 @error("break_start.$nextIndex")
                                 {{ $message }}
@@ -109,9 +124,11 @@
                     <th class="detail-table__header">備考</th>
                     <td class="detail-table__data">
                         @if($pendingCorrection)
-                            {{ $pendingCorrection->remark }}
+                            <span class="remark">
+                                {{ $pendingCorrection->remark }}
+                            </span>
                         @else
-                            <textarea class="detail-table__textarea" name="remark">{{ $attendance->remark }}</textarea>
+                            <textarea class="detail-table__textarea" name="remark">{{ old('remark', $attendance->remark) }}</textarea>
                             <div class="error-message">
                                 @error('remark')
                                 {{ $message }}
