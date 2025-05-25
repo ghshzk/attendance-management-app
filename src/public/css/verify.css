@@ -1,0 +1,40 @@
+.verification-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 82vh;
+}
+
+.verification-content {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.verification-content__message {
+    text-align: center;
+}
+
+.verification-btn {
+    font-size: 24px;
+    font-weight: 700;
+    border: 1px solid #000;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    padding: 16px 32px;
+    margin: 30px;
+}
+
+.verification-btn__link {
+    text-decoration: none;
+    color: #000;
+}
+
+.resend-form__btn {
+    border: none;
+    background-color: transparent;
+    color: #0073CC;
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 25px;
+}
