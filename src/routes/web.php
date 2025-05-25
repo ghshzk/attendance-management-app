@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceListController;
 use App\Http\Controllers\CorrectionRequestController;
-use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\AdminAttendanceListController;
 use App\Http\Requests\EmailVerificationRequest;
 
 
@@ -46,10 +47,12 @@ Route::get('/admin/login',[AdminLoginController::class,'create']);
 Route::post('/admin/login',[AdminLoginController::class,'store']);
 Route::post('/admin/logout',[AdminLoginController::class,'destroy'])->name('admin.logout');
 
-Route::middleware('auth')->group(function(){
-    Route::get('/admin/attendance/list',[AttendanceController::class,'adminIndex']);
-});
 Route::middleware(['auth'])->group(function(){
+    //管理者ユーザー
+    Route::get('/admin/attendance/list',[AdminAttendanceListController::class,'index'])->name('admin.attendance.index');
+
+
+    //一般ユーザー
     Route::get('/attendance',[AttendanceController::class,'create'])->name('attendance.create');
     Route::post('/attendance/clock_in',[AttendanceController::class,'clockIn'])->name('attendance.clockIn');
     Route::post('/attendance/break_start',[AttendanceController::class,'breakStart'])->name('attendance.breakStart');

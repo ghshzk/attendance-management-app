@@ -10,7 +10,6 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    //一般ユーザー
     public function create()
     {
         $user = Auth::user();
@@ -103,12 +102,4 @@ class AttendanceController extends Controller
 
         return redirect()->route('attendance.create');
     }
-
-
-    //管理者ユーザー表示
-    public function adminIndex()
-    {
-        return view('admin.attendance_list');
-    }
-
 }

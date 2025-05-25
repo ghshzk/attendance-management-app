@@ -19,7 +19,7 @@
     background-color: #000;
 }
 
-.list-month-nav {
+.list-date-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,7 +34,7 @@
 }
 
 
-.month-link {
+.date-link {
     text-decoration: none;
     font-size: 16px;
     font-weight: 700;
@@ -53,7 +53,7 @@
     transform: rotate(180deg);
 }
 
-.month-nav-calendar {
+.date-nav-calendar {
     display: flex;
     align-items: center;
     font-size: 20px;
