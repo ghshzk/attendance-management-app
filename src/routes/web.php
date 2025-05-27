@@ -8,6 +8,7 @@ use App\Http\Controllers\CorrectionRequestController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminAttendanceListController;
+use App\Http\Controllers\StaffListController;
 use App\Http\Requests\EmailVerificationRequest;
 
 
@@ -49,15 +50,18 @@ Route::post('/admin/logout',[AdminLoginController::class,'destroy'])->name('admi
 
 Route::middleware(['auth'])->group(function(){
     //管理者ユーザー
-    Route::get('/admin/attendance/list',[AdminAttendanceListController::class,'index'])->name('admin.attendance.index');
+    Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('admin.attendance.index');
+    Route::get('/admin/staff/list', [StaffListController::class,'index'])->name('admin.staff.index');
+    Route::get('/admin/staff/{id}', [StaffListController::class,'staffIndex'])->name('admin.staff.attendance');
+
 
 
     //一般ユーザー
-    Route::get('/attendance',[AttendanceController::class,'create'])->name('attendance.create');
-    Route::post('/attendance/clock_in',[AttendanceController::class,'clockIn'])->name('attendance.clockIn');
-    Route::post('/attendance/break_start',[AttendanceController::class,'breakStart'])->name('attendance.breakStart');
-    Route::post('/attendance/break_end',[AttendanceController::class,'breakEnd'])->name('attendance.breakEnd');
-    Route::post('/attendance/clock_put',[AttendanceController::class,'clockOut'])->name('attendance.clockOut');
+    Route::get('/attendance', [AttendanceController::class,'create'])->name('attendance.create');
+    Route::post('/attendance/clock_in', [AttendanceController::class,'clockIn'])->name('attendance.clockIn');
+    Route::post('/attendance/break_start', [AttendanceController::class,'breakStart'])->name('attendance.breakStart');
+    Route::post('/attendance/break_end', [AttendanceController::class,'breakEnd'])->name('attendance.breakEnd');
+    Route::post('/attendance/clock_put', [AttendanceController::class,'clockOut'])->name('attendance.clockOut');
 
     Route::get('/attendance/list', [AttendanceListController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/{id}', [AttendanceListController::class, 'show'])->name('attendance.show');

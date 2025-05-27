@@ -8,14 +8,25 @@ use App\Models\Attendance;
 use App\Models\BreakTime;
 use Carbon\Carbon;
 
-class AdminAttendanceListController extends Controller
-{
-    public function index(Request $request)
-    {
-        $date = $request->input('date') ? Carbon::parse($request->input('date')) : Carbon::now();
 
-        $attendances = Attendance::with(['user', 'breakTimes'])
-                        ->whereDate('date', $date)
+class StaffListController extends Controller
+{
+    public function index()
+    {
+        $staffs = User::where('role', 'user')->get();
+        return view('admin.staff_list', compact('staffs'));
+    }
+
+    public function staffIndex(Request $request, $id)
+    {
+        $staff = User::findOrFail($id);
+        $month = $request->input('month') ? Carbon::parse($request->input('month')) : Carbon::now();
+
+        $attendances = Attendance::with('breakTimes')
+                        ->where('user_id', $id)
+                        ->whereYear('date', $month->year)
+                        ->whereMonth('date', $month->month) //月の絞り込み
+                        ->orderBy('date') //日付順で表示
                         ->get();
 
         $attendances = $attendances->map(function ($attendance) {
@@ -44,6 +55,7 @@ class AdminAttendanceListController extends Controller
             return $attendance;
         });
 
-        return view('admin.attendance_list', compact('attendances', 'date'));
+        return view('admin.staff_attendance_list', compact('staff', 'month','attendances'));
     }
+
 }
