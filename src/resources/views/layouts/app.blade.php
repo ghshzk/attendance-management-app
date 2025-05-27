@@ -22,10 +22,10 @@
                             {{-- 管理者用 --}}
                             @if(Auth::user()->role === 'admin')
                                 <li class="header-nav-item">
-                                    <a class="header-nav-link" href="/">勤怠一覧</a>
+                                    <a class="header-nav-link" href="/admin/attendance/list">勤怠一覧</a>
                                 </li>
                                 <li class="header-nav-item">
-                                    <a class="header-nav-link" href="/">スタッフ一覧</a>
+                                    <a class="header-nav-link" href="/admin/staff/list">スタッフ一覧</a>
                                 </li>
                                 <li class="header-nav-item">
                                     <a class="header-nav-link" href="/">申請一覧</a>
