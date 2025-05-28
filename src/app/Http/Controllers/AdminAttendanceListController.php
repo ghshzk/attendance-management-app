@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\BreakTime;
+use App\Http\Requests\AttendanceRequest;
 use Carbon\Carbon;
 
 class AdminAttendanceListController extends Controller
@@ -45,5 +46,37 @@ class AdminAttendanceListController extends Controller
         });
 
         return view('admin.attendance_list', compact('attendances', 'date'));
+    }
+
+    public function show($id) {
+        $attendance_correct_request->load('correctionBreakTimes');
+        $attendance = Attendance::with('user', 'breakTimes')->findOrFail($id);
+        return view('admin.attendance_show', compact('attendance'));
+    }
+
+    public function update(AttendanceRequest $request, $id)
+    {
+        $validated = $request->validated();
+        $attendance = Attendance::with('breakTimes')->findOrFail($id);
+
+        $attendance->clock_in = $validated['clock_in'];
+        $attendance->clock_out = $validated['clock_out'];
+        $attendance->remark = $validated['remark'];
+        $attendance->save();
+
+        $attendance->breakTimes()->delete();
+
+        if (isset($validated['break_start'])) {
+            foreach ($validated['break_start'] as $index => $start) {
+                $end = $validated['break_end'][$index] ?? null;
+                if ($start || $end) {
+                    $attendance->breakTimes()->create([
+                        'break_start' => $start,
+                        'break_end' => $end,
+                    ]);
+                }
+            }
+        }
+        return redirect()->route('admin.attendance.show', ['id' => $id]);
     }
 }

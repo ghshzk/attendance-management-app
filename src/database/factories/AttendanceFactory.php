@@ -27,7 +27,7 @@ class AttendanceFactory extends Factory
             'date' => now()->format('Y-m-d'), //日付重複防止のためSeeder側で管理
             'clock_in' => $clockIn->format('H:i:s'),
             'clock_out' => $clockOut->format('H:i:s'),
-            'remark' => $this->faker->optional()->sentence,
+            'remark' => null,
         ];
     }
 }

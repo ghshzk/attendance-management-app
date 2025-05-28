@@ -121,6 +121,28 @@ class StaffListTest extends TestCase
         $response->assertSee('17:30');
     }
 
-    //「詳細」を押下すると、その日の勤怠詳細画面に遷移する：一旦保留
+    //「詳細」を押下すると、その日の勤怠詳細画面に遷移する
+    public function test_list_get_user_attendance_detail()
+    {
+        $attendance = Attendance::factory()->create([
+            'user_id' => $this->user->id,
+            'attendance_status_id' => $this->status->id,
+            'date' => '2025-05-01',
+            'clock_in' => '09:00:00',
+            'clock_out' => '18:00:00',
+        ]);
+
+        BreakTime::factory()->forAttendance($attendance)->create([
+            'break_start' => '12:00:00',
+            'break_end' => '13:00:00',
+        ]);
+
+        $response = $this->actingAs($this->admin)->get(route('admin.attendance.show', ['id' => $attendance->id]));
+        $response->assertStatus(200);
+        $response->assertSee('勤怠詳細');
+        $response->assertSee('山田 太郎');
+        $response->assertSee('2025年');
+        $response->assertSee('5月1日');
+    }
 
 }
