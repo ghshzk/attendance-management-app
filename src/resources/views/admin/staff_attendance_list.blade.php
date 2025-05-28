@@ -55,7 +55,7 @@
                 <td class="attendance-table__data">{{ $attendance->break_time ?? '-' }}</td>
                 <td class="attendance-table__data">{{ $attendance->work_time }}</td>
                 <td class="attendance-table__data">
-                    <a class="attendance-table__btn" href="{{ route('attendance.show', ['id' => $attendance->id]) }}">詳細</a>
+                    <a class="attendance-table__btn" href="{{ route('admin.attendance.show', ['id' => $attendance->id]) }}">詳細</a>
                 </td>
             </tr>
             @endforeach

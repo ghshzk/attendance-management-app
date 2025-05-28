@@ -15,8 +15,9 @@
                     <th class="detail-table__header">名前</th>
                     <td class="detail-table__data">
                         <span class="name">
-                            {{ $attendance->user->name }}</td>
+                            {{ $attendance->user->name }}
                         </span>
+                    </td>
                 </tr>
 
                 <tr class="detail-table__row">

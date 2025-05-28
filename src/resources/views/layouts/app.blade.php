@@ -28,7 +28,7 @@
                                     <a class="header-nav-link" href="/admin/staff/list">スタッフ一覧</a>
                                 </li>
                                 <li class="header-nav-item">
-                                    <a class="header-nav-link" href="/">申請一覧</a>
+                                    <a class="header-nav-link" href="/stamp_correction_request/list">申請一覧</a>
                                 </li>
                             @else
                             {{-- 一般ユーザー用 --}}

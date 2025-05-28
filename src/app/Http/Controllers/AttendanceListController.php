@@ -78,20 +78,37 @@ class AttendanceListController extends Controller
             'status' => 'pending',
         ]);
 
+        //休憩時間の修正がある場合
         if (!empty($validated['break_start']) && !empty($validated['break_end'])) {
             foreach ($validated['break_start'] as $index => $start) {
                 if (empty($start) && empty($validated['break_end'][$index])) {
                     continue;
                 }
 
-                CorrectionBreakTime::create([
+                $createData = [
                     'correction_request_id' => $correctionRequest->id,
-                    'break_time_id' => $attendance->breakTimes[$index]->id ?? null,
                     'break_start' => $start,
                     'break_end' => $validated['break_end'][$index],
+                ];
+
+                if (isset($attendance->breakTimes[$index])) {
+                    $createData['break_time_id'] = $attendance->breakTimes[$index]->id;
+                }
+
+                CorrectionBreakTime::create($createData);
+            }
+        } else {
+            //休憩の修正がない場合は既存データ引き継ぎ
+            foreach ($attendance->breakTimes as $breakTime) {
+                CorrectionBreakTime::create([
+                    'correction_request_id' => $correctionRequest->id,
+                    'break_time_id' => $breakTime->id,
+                    'break_start' => $breakTime->break_start,
+                    'break_end' => $breakTime->break_end,
                 ]);
             }
         }
+
         return redirect()->route('attendance.show', $attendance->id);
     }
 }

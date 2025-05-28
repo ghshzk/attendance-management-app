@@ -1,0 +1,103 @@
+.approve-container {
+    width: 65vw;
+    margin: 60px auto;
+}
+
+.approve-heading {
+    font-size: 30px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.approve-heading::before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 42px;
+    background-color: #000;
+}
+
+.approve-table {
+    width: 100%;
+    margin-top: 40px;
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.approve-table__inner {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.approve-table__row:not(:last-of-type) {
+    border-bottom: 2px solid #E1E1E1;
+}
+
+.approve-table__header {
+    color: #737373;
+    width: 35%;
+    text-align: left;
+    padding-left: 60px;
+}
+
+.approve-table__data {
+    padding: 30px 50px 30px 0px;
+}
+
+
+.name,
+.remark {
+    margin-left: 10px;
+}
+
+.year {
+    margin-right: 26%;
+    margin-left: 10px;
+}
+
+.clock-in,
+.break-start {
+    margin-right: 11%;
+    margin-left: 11px;
+}
+
+.clock-out,
+.break-end {
+    margin-left: 12%;
+}
+
+.approve-form__completed {
+    justify-self: end;
+    text-align: center;
+    margin-top: 35px;
+    padding: 8.5px;
+    width: 130px;
+    background-color: #696969;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+
+.approve-form__btn {
+    display: block;
+    justify-self: end;
+    margin-top: 35px;
+    padding: 8.5px;
+    width: 130px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    border: none;
+}

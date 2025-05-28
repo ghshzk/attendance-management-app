@@ -8,6 +8,7 @@ use App\Http\Controllers\CorrectionRequestController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminAttendanceListController;
+use App\Http\Controllers\AdminCorrectionRequestController;
 use App\Http\Controllers\StaffListController;
 use App\Http\Requests\EmailVerificationRequest;
 
@@ -51,9 +52,14 @@ Route::post('/admin/logout',[AdminLoginController::class,'destroy'])->name('admi
 Route::middleware(['auth'])->group(function(){
     //管理者ユーザー
     Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('admin.attendance.index');
+    Route::get('/admin/attendance/{id}', [AdminAttendanceListController::class,'show'])->name('admin.attendance.show');
+    Route::post('/admin/attendance/{id}', [AdminAttendanceListController::class,'update'])->name('admin.attendance.update');
+
     Route::get('/admin/staff/list', [StaffListController::class,'index'])->name('admin.staff.index');
     Route::get('/admin/staff/{id}', [StaffListController::class,'staffIndex'])->name('admin.staff.attendance');
 
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AdminCorrectionRequestController::class, 'show'])->name('admin.approve.show');
+    Route::post('/stamp_correction_request/approve/{attendance_correct_request}', [AdminCorrectionRequestController::class, 'update'])->name('admin.approve.update');
 
 
     //一般ユーザー
@@ -67,6 +73,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/attendance/{id}', [AttendanceListController::class, 'show'])->name('attendance.show');
     Route::post('/attendance/{id}', [AttendanceListController::class, 'update'])->name('attendance.update');
 
+    //一般ユーザー・管理者ユーザー共通
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index'])->name('correction.index');
 });
 

@@ -136,8 +136,9 @@ class AttendanceCorrectionTest extends TestCase
         ]);
 
         $postResponse->assertStatus(302);
-    //管理者ユーザーで承認画面と申請一覧を確認するの部分がまだ画面がないため保留
     }
+
+    //管理者ユーザーで承認画面と申請一覧を確認するの部分がまだ画面がないため保留
 
     //「承認待ち」にログインユーザーが行った申請が全て表示されていること()
     public function test_correction_request_list_pending()
