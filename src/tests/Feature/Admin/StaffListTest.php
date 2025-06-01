@@ -22,6 +22,7 @@ class StaffListTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Carbon::setTestNow(Carbon::now());
         $this->seed([
             UsersTableSeeder::class,
             AttendanceStatusesTableSeeder::class,
@@ -43,10 +44,10 @@ class StaffListTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.staff.index'));
 
         $response->assertStatus(200);
-        $response->assertSee('山田 太郎');
-        $response->assertSee('鈴木 二郎');
-        $response->assertSee('user1@example.com');
-        $response->assertSee('user2@example.com');
+        $response->assertSeeText('山田 太郎');
+        $response->assertSeeText('鈴木 二郎');
+        $response->assertSeeText('user1@example.com');
+        $response->assertSeeText('user2@example.com');
     }
 
     //ユーザーの勤怠情報が正しく表示される
@@ -65,10 +66,10 @@ class StaffListTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.staff.attendance', ['id' => $this->user->id]));
 
         $response->assertStatus(200);
-        $response->assertSee('山田 太郎');
-        $response->assertSee($today);
-        $response->assertSee('09:00');
-        $response->assertSee('18:00');
+        $response->assertSeeText('山田 太郎');
+        $response->assertSeeText($today);
+        $response->assertSeeText('09:00');
+        $response->assertSeeText('18:00');
     }
 
     //「前月」を押下した時に表示月の前月の情報が表示される
@@ -90,10 +91,10 @@ class StaffListTest extends TestCase
         ]));
 
         $response->assertStatus(200);
-        $response->assertSee('山田 太郎');
-        $response->assertSee($prevMonthDay);
-        $response->assertSee('10:00');
-        $response->assertSee('19:00');
+        $response->assertSeeText('山田 太郎');
+        $response->assertSeeText($prevMonthDay);
+        $response->assertSeeText('10:00');
+        $response->assertSeeText('19:00');
     }
 
     //「翌月」を押下した時に表示月の前月の情報が表示される
@@ -115,10 +116,10 @@ class StaffListTest extends TestCase
         ]));
 
         $response->assertStatus(200);
-        $response->assertSee('山田 太郎');
-        $response->assertSee($nextMonthDay);
-        $response->assertSee('08:00');
-        $response->assertSee('17:30');
+        $response->assertSeeText('山田 太郎');
+        $response->assertSeeText($nextMonthDay);
+        $response->assertSeeText('08:00');
+        $response->assertSeeText('17:30');
     }
 
     //「詳細」を押下すると、その日の勤怠詳細画面に遷移する
@@ -127,7 +128,7 @@ class StaffListTest extends TestCase
         $attendance = Attendance::factory()->create([
             'user_id' => $this->user->id,
             'attendance_status_id' => $this->status->id,
-            'date' => '2025-05-01',
+            'date' => '2025-06-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
         ]);
@@ -139,10 +140,13 @@ class StaffListTest extends TestCase
 
         $response = $this->actingAs($this->admin)->get(route('admin.attendance.show', ['id' => $attendance->id]));
         $response->assertStatus(200);
-        $response->assertSee('勤怠詳細');
-        $response->assertSee('山田 太郎');
-        $response->assertSee('2025年');
-        $response->assertSee('5月1日');
+        $response->assertSeeText('勤怠詳細');
+        $response->assertSeeText('山田 太郎');
+        $response->assertSeeText('2025年');
+        $response->assertSeeText('6月1日');
+        $response->assertSee('09:00');
+        $response->assertSee('18:00');
+        $response->assertSee('12:00');
+        $response->assertSee('13:00');
     }
-
 }

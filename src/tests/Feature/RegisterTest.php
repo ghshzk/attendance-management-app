@@ -9,11 +9,6 @@ use Tests\TestCase;
 class RegisterTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
 
     //名前が未入力の場合、バリデーションメッセージが表示される
     public function test_register_validate_name()
@@ -107,5 +102,4 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
         ]);
     }
-
 }

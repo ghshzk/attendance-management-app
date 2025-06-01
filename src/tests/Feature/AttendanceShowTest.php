@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Illuminate\Support\Carbon;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\AttendanceStatus;
 use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\AttendanceStatusesTableSeeder;
+use Illuminate\Support\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class AttendanceShowTest extends TestCase
 {
@@ -34,12 +34,12 @@ class AttendanceShowTest extends TestCase
         $this->attendance = Attendance::factory()->create([
             'user_id' => $this->user->id,
             'attendance_status_id' => $this->status->id,
-            'date' => '2025-05-01',
+            'date' => '2025-06-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
         ]);
 
-        $this->break =BreakTime::factory()->create([
+        $this->break = BreakTime::factory()->create([
             'attendance_id' => $this->attendance->id,
             'break_start' => '12:00:00',
             'break_end' => '13:00:00',
@@ -52,7 +52,7 @@ class AttendanceShowTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
 
         $response->assertStatus(200);
-        $response->assertSee($this->user->name);
+        $response->assertSeeText($this->user->name);
     }
 
     //勤怠詳細画面の日付が選択した日付になっている
@@ -61,8 +61,8 @@ class AttendanceShowTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('attendance.show',['id' => $this->attendance->id]));
 
         $response->assertStatus(200);
-        $response->assertSee('2025年');
-        $response->assertSee('5月1日');
+        $response->assertSeeText('2025年');
+        $response->assertSeeText('6月1日');
     }
 
     //出勤・退勤にて記されている時間がログインユーザーの打刻と一致している

@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\AttendanceStatus;
 use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\AttendanceStatusesTableSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+use Carbon\Carbon;
 
 class AttendanceStatusTest extends TestCase
 {
@@ -23,6 +23,9 @@ class AttendanceStatusTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        Carbon::setTestNow(Carbon::now());
+
         $this->seed([
             UsersTableSeeder::class,
             AttendanceStatusesTableSeeder::class,
@@ -32,18 +35,13 @@ class AttendanceStatusTest extends TestCase
         $this->user = User::where('email', 'user1@example.com')->first();
     }
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
 
     //勤務外の場合、勤怠ステータスが正しく表示される
     public function test_status_pending()
     {
         $response= $this->actingAs($this->user)->get('/attendance');
         $response->assertStatus(200);
-        $response->assertSee('勤務外');
+        $response->assertSeeText('勤務外');
     }
 
     //出勤中の場合、勤怠ステータスが正しく表示される
@@ -51,15 +49,15 @@ class AttendanceStatusTest extends TestCase
     {
         Attendance::create([
             'user_id' => $this->user->id,
-            'date' => Carbon::now(),
+            'date' => Carbon::today(),
             'clock_in' => Carbon::now(),
-            'attendance_status_id' => $this->statuses['出勤中'],
+            'attendance_status_id' => $this->statuses['勤務中'],
         ]);
 
         $response = $this->actingAs($this->user)->get('/attendance');
 
         $response->assertStatus(200);
-        $response->assertSee('出勤中');
+        $response->assertSeeText('勤務中');
     }
 
     //休憩中の場合、勤怠ステータスが正しく表示される
@@ -79,7 +77,7 @@ class AttendanceStatusTest extends TestCase
 
         $response = $this->actingAs($this->user)->get('/attendance');
         $response->assertStatus(200);
-        $response->assertSee('休憩中');
+        $response->assertSeeText('休憩中');
     }
 
     //退勤済の場合、勤怠ステータスが正しく表示される
@@ -96,6 +94,6 @@ class AttendanceStatusTest extends TestCase
         $response = $this->actingAs($this->user)->get('/attendance');
 
         $response->assertStatus(200);
-        $response->assertSee('退勤済');
+        $response->assertSeeText('退勤済');
     }
 }

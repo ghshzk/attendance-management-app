@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\BreakTime;
+use App\Models\CorrectionRequest;
+use App\Models\CorrectionBreakTime;
 use App\Http\Requests\AttendanceRequest;
 use Carbon\Carbon;
 
@@ -49,8 +51,15 @@ class AdminAttendanceListController extends Controller
     }
 
     public function show($id) {
-        $attendance_correct_request->load('correctionBreakTimes');
         $attendance = Attendance::with('user', 'breakTimes')->findOrFail($id);
+
+        $attendance_correct_request = CorrectionRequest::where('attendance_id', $attendance->id)
+                                    ->latest()
+                                    ->first();
+
+        if ($attendance_correct_request) {
+            $attendance_correct_request->load('correctionBreakTimes');
+        }
         return view('admin.attendance_show', compact('attendance'));
     }
 

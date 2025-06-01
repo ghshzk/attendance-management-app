@@ -24,7 +24,6 @@ class EmailVerificationTest extends TestCase
     {
         parent::setUp();
 
-        //$this->user = User::where('email', $this->data['email'])->first();
         $this->user = User::factory()->create([
             'name' => 'テストユーザー',
             'email' => 'test2@example.com',
@@ -61,7 +60,7 @@ class EmailVerificationTest extends TestCase
     {
         $response = $this->actingAs($this->user)->get('/email/verify');
         $response->assertStatus(200);
-        $response->assertSee('認証はこちらから');
+        $response->assertSeeText('認証はこちらから');
 
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',

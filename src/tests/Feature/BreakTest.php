@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\AttendanceStatus;
 use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\AttendanceStatusesTableSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Carbon\Carbon;
+use Tests\TestCase;
 
 class BreakTest extends TestCase
 {
@@ -23,6 +23,8 @@ class BreakTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        Carbon::setTestNow(Carbon::now());
 
         $this->seed([
             UsersTableSeeder::class,
@@ -36,21 +38,16 @@ class BreakTest extends TestCase
             'user_id' => $this->user->id,
             'date' => Carbon::today(),
             'clock_in' => Carbon::now()->subHours(2),
-            'attendance_status_id' => $this->statuses['出勤中']
+            'attendance_status_id' => $this->statuses['勤務中']
         ]);
     }
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
 
     //休憩ボタンが正しく機能する
     public function test_break_start_button_works()
     {
         $response =  $this->actingAs($this->user)->get('/attendance');
-        $response->assertSee('休憩入');
+        $response->assertSeeText('休憩入');
 
         $this->post(route('attendance.breakStart')); //休憩処理
 
@@ -63,7 +60,7 @@ class BreakTest extends TestCase
 
         $response = $this->get('/attendance');
         $response->assertStatus(200);
-        $response->assertSee('休憩中');
+        $response->assertSeeText('休憩中');
     }
 
     //休憩は1日に何回でもできる
@@ -75,14 +72,14 @@ class BreakTest extends TestCase
         $this->post(route('attendance.breakEnd'));
 
         $response = $this->get('/attendance');
-        $response->assertSee('休憩入');
+        $response->assertSeeText('休憩入');
     }
 
     //休憩戻ボタンが正しく機能する
     public function test_break_end_button_works()
     {
         $response =  $this->actingAs($this->user)->get('/attendance');
-        $response->assertSee('休憩入');
+        $response->assertSeeText('休憩入');
 
         $this->post(route('attendance.breakStart')); //休憩処理
 
@@ -100,7 +97,7 @@ class BreakTest extends TestCase
 
         $response = $this->get('/attendance');
         $response->assertStatus(200);
-        $response->assertSee('出勤中');
+        $response->assertSeeText('勤務中');
     }
 
     //休憩戻は1日に何回でもできる
@@ -114,8 +111,25 @@ class BreakTest extends TestCase
         $this->post(route('attendance.breakStart'));
 
         $response = $this->get('/attendance');
-        $response->assertSee('休憩戻');
+        $response->assertSeeText('休憩戻');
     }
 
-    //休憩時刻が勤怠一覧画面で確認できる、一旦保留
+    //休憩時刻が勤怠一覧画面で確認できる
+    public function test_break_time_attendance_list()
+    {
+        $this->actingAs($this->user);
+        $this->post(route('attendance.breakStart'));
+
+        Carbon::setTestNow(Carbon::now()->addMinutes(60));
+        $this->post(route('attendance.breakEnd'));
+
+        $attendance = Attendance::where('user_id', $this->user->id)
+                        ->where('date', Carbon::today()->format('Y-m-d'))
+                        ->first();
+        $this->assertNotNull($attendance);
+
+        $response = $this->actingAs($this->user)->get(route('attendance.index'));
+        $response->assertStatus(200);
+        $response->assertSeeText('1:00');
+    }
 }

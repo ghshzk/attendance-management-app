@@ -15,15 +15,16 @@ class AttendanceStatusesTableSeeder extends Seeder
     public function run()
     {
         $params = [
-            '勤務外',
-            '勤務中',
-            '休憩中',
-            '退勤済'
+            ['id' => 1, 'status' => '勤務外'],
+            ['id' => 2, 'status' => '勤務中'],
+            ['id' => 3, 'status' => '休憩中'],
+            ['id' => 4, 'status' => '退勤済'],
         ];
 
-        foreach ($params as $status) {
+        foreach ($params as $param) {
             AttendanceStatus::create([
-                'status' => $status,
+                'id' => $param['id'],
+                'status' => $param['status'],
             ]);
         }
     }

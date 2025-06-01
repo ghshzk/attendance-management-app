@@ -2,15 +2,15 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\AttendanceStatus;
 use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\AttendanceStatusesTableSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Carbon\Carbon;
+use Tests\TestCase;
 
 
 class ClockInTest extends TestCase
@@ -23,6 +23,8 @@ class ClockInTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        Carbon::setTestNow(Carbon::now()); //テスト中の時刻を固定
 
         $this->seed([
             UsersTableSeeder::class,
@@ -41,13 +43,14 @@ class ClockInTest extends TestCase
     public function test_clock_in_button_works()
     {
         $response = $this->actingAs($this->user)->get('/attendance');
-        $response->assertSee('出勤'); //出勤ボタンが表示されていることの確認
+        $response->assertSeeText('出勤'); //出勤ボタンが表示されていることの確認
 
-        $this->post(route('attendance.clockIn')); //出勤ボタンが押した時の処理
+        $response = $this->post(route('attendance.clockIn')); //出勤ボタンが押した時の処理
+        $response->assertRedirect(route('attendance.create'));
 
         $response = $this->get('/attendance');
         $response->assertStatus(200);
-        $response->assertSee('勤務中');
+        $response->assertSeeText('勤務中');
     }
 
     //出勤は1日1回のみできる
@@ -63,24 +66,24 @@ class ClockInTest extends TestCase
 
         $response = $this->actingAs($this->user)->get('/attendance');
         $response->assertStatus(200);
-        $response->assertDontSee('出勤');
+        $response->assertDontSeeText('出勤');
     }
 
-    //出勤時刻が管理画面で確認できる、内容確認中一旦保留
+    //出勤時刻が管理画面(勤怠一覧画面)で確認できる
     public function test_clock_in_time_attendance_list()
     {
-        $this->actingAs($this->user)->get('/attendance');
+        $response = $this->actingAs($this->user)->get('/attendance');
         $this->post(route('attendance.clockIn'));
 
         $attendance = Attendance::where('user_id', $this->user->id)
                         ->where('date', Carbon::today()->format('Y-m-d'))
                         ->first();
+        $this->assertNotNull($attendance);
 
         $clockIn = Carbon::parse($attendance->clock_in)->format('H:i');
 
-        $response = $this->get(route('attendance.index'));
-
+        $response = $this->actingAs($this->user)->get(route('attendance.index'));
         $response->assertStatus(200);
-        $response->assertSee($clockIn);
+        $response->assertSeeText($clockIn);
     }
 }

@@ -22,6 +22,8 @@ class AttendanceListTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Carbon::setTestNow(Carbon::now());
+
         $this->seed([
             UsersTableSeeder::class,
             AttendanceStatusesTableSeeder::class,
@@ -68,13 +70,13 @@ class AttendanceListTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.attendance.index'));
 
         $response->assertStatus(200);
-        $response->assertSee('山田 太郎');
-        $response->assertSee('鈴木 二郎');
-        $response->assertSee('09:00');
-        $response->assertSee('18:00');
+        $response->assertSeeText('山田 太郎');
+        $response->assertSeeText('鈴木 二郎');
+        $response->assertSeeText('09:00');
+        $response->assertSeeText('18:00');
 
-        $response->assertDontSee('09:30');
-        $response->assertDontSee('19:00');
+        $response->assertDontSeeText('09:30');
+        $response->assertDontSeeText('19:00');
     }
 
     //遷移した際に現在の日付が表示される
@@ -85,7 +87,7 @@ class AttendanceListTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.attendance.index'));
 
         $response->assertStatus(200);
-        $response->assertSee($currentDate);
+        $response->assertSeeText($currentDate);
     }
 
     //「前日」を押下した時に前の日の勤怠情報が表示される
@@ -98,11 +100,11 @@ class AttendanceListTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSee('10:00');
-        $response->assertSee('19:00');
+        $response->assertSeeText('10:00');
+        $response->assertSeeText('19:00');
 
-        $response->assertDontSee('09:00');
-        $response->assertDontSee('18:30');
+        $response->assertDontSeeText('09:00');
+        $response->assertDontSeeText('18:30');
     }
 
     //「翌日」を押下した時に次の日の勤怠情報が表示される
@@ -115,11 +117,10 @@ class AttendanceListTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSee('09:30');
-        $response->assertSee('18:30');
+        $response->assertSeeText('09:30');
+        $response->assertSeeText('18:30');
 
-        $response->assertDontSee('10:00');
-        $response->assertDontSee('18:00');
+        $response->assertDontSeeText('10:00');
+        $response->assertDontSeeText('18:00');
     }
-
 }

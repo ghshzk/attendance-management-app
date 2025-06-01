@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Illuminate\Support\Carbon;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\AttendanceStatus;
 use Database\Seeders\UsersTableSeeder;
 use Database\Seeders\AttendanceStatusesTableSeeder;
+use Illuminate\Support\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 
 class AttendanceListTest extends TestCase
@@ -23,6 +23,7 @@ class AttendanceListTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Carbon::setTestNow(Carbon::now());
         $this->seed([
             UsersTableSeeder::class,
             AttendanceStatusesTableSeeder::class,
@@ -37,7 +38,7 @@ class AttendanceListTest extends TestCase
         $attendance = Attendance::factory()->create([
             'user_id' => $this->user->id,
             'attendance_status_id' => $this->status->id,
-            'date' => '2025-05-01',
+            'date' => Carbon::today(),
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
         ]);
@@ -47,14 +48,19 @@ class AttendanceListTest extends TestCase
             'break_end' => '13:00:00',
         ]);
 
+        $date = Carbon::parse($attendance->date)->format('m/d');
+        $dayOfWeek = ['日','月','火','水','木','金','土'][Carbon::parse($attendance->date)->dayOfWeek];
+        $expectedDate = $date . '(' . $dayOfWeek . ')';
+
+
         $response = $this->actingAs($this->user)->get(route('attendance.index'));
 
         $response->assertStatus(200);
-        $response->assertSee('05/01(木)');
-        $response->assertSee('09:00');
-        $response->assertSee('18:00');
-        $response->assertSee('1:00');
-        $response->assertSee('8:00');
+        $response->assertSeeText($expectedDate);
+        $response->assertSeeText('09:00');
+        $response->assertSeeText('18:00');
+        $response->assertSeeText('1:00');
+        $response->assertSeeText('8:00');
     }
 
     //勤怠一覧画面に遷移した際に現在の月が表示される
@@ -65,7 +71,7 @@ class AttendanceListTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('attendance.index'));
 
         $response->assertStatus(200);
-        $response->assertSee($currentMonth);
+        $response->assertSeeText($currentMonth);
     }
 
     //前月を押下した時に表示月の前月の情報が表示される
@@ -74,10 +80,11 @@ class AttendanceListTest extends TestCase
         $prevMonth = Carbon::now()->subMonth()->format('Y/m');
 
         $response = $this->actingAs($this->user)->get(route('attendance.index',[
-            'month' => Carbon::now()->subMonth()->format('Y-m-01')]));
+            'month' => Carbon::now()->subMonth()->format('Y-m-01')
+        ]));
 
         $response->assertStatus(200);
-        $response->assertSee($prevMonth);
+        $response->assertSeeText($prevMonth);
     }
 
     //翌月を押下した時に表示月の前月の情報が表示される
@@ -90,7 +97,7 @@ class AttendanceListTest extends TestCase
         ]));
 
         $response->assertStatus(200);
-        $response->assertSee($nextMonth);
+        $response->assertSeeText($nextMonth);
     }
 
     //詳細を押下すると、その日の勤怠詳細画面に遷移する
@@ -99,7 +106,7 @@ class AttendanceListTest extends TestCase
         $attendance = Attendance::factory()->create([
             'user_id' => $this->user->id,
             'attendance_status_id' => $this->status->id,
-            'date' => '2025-05-01',
+            'date' => '2025-06-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
         ]);
@@ -112,8 +119,8 @@ class AttendanceListTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('attendance.show',['id' => $attendance->id]));
 
         $response->assertStatus(200);
-        $response->assertSee('勤怠詳細');
-        $response->assertSee('2025年');
-        $response->assertSee('5月1日');
+        $response->assertSeeText('勤怠詳細');
+        $response->assertSeeText('2025年');
+        $response->assertSeeText('6月1日');
     }
 }

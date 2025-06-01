@@ -32,7 +32,7 @@ class AdminLoginController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'ログイン情報が正しくありません'
+            'email' => 'ログイン情報が登録されていません'
         ]);
     }
 

@@ -36,7 +36,7 @@ class AttendanceShowTest extends TestCase
         $this->attendance = Attendance::factory()->create([
             'user_id' => $this->user->id,
             'attendance_status_id' => $this->status->id,
-            'date' => '2025-05-01',
+            'date' => '2025-06-01',
             'clock_in' => '09:00:00',
             'clock_out' => '18:00:00',
         ]);
@@ -54,8 +54,8 @@ class AttendanceShowTest extends TestCase
         $response = $this->actingAs($this->admin)->get(route('admin.attendance.show', ['id' => $this->attendance->id]));
 
         $response->assertStatus(200);
-        $response->assertSee('2025年');
-        $response->assertSee('5月1日');
+        $response->assertSeeText('2025年');
+        $response->assertSeeText('6月1日');
         $response->assertSee('09:00');
         $response->assertSee('18:00');
         $response->assertSee('12:00');
