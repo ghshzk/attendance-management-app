@@ -32,7 +32,7 @@ class AdminCorrectionRequestController extends Controller
 
     public function show(CorrectionRequest $attendance_correct_request)
     {
-        //$attendance_correct_request->load('correctionBreakTimes');
+        $attendance_correct_request->load('correctionBreakTimes');
         $attendance = $attendance_correct_request->attendance;
         $pendingCorrection = $attendance_correct_request;
 

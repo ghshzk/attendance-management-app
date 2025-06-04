@@ -24,7 +24,39 @@ class DatabaseSeeder extends Seeder
         $users = User::where('role', 'user')->get();
 
         foreach ($users as $user) {
-            $dates = collect();
+            $thisMonthDates = collect();
+            $startOfMonth = now()->startOfMonth();
+
+            for ($i = 0; $i < now()->day; $i++) {
+                $thisMonthDates->push($startOfMonth->copy()->addDays($i)->format('Y-m-d'));
+            }
+
+            $lastMonth = now()->subMonth();
+            $lastMonthDates = collect();
+            $startOfLastMonth = $lastMonth->startOfMonth();
+            for ($i = 0; $i < $lastMonth->daysInMonth; $i++) {
+                $lastMonthDates->push($startOfLastMonth->copy()->addDays($i)->format('Y-m-d'));
+            }
+
+            $selectedThisMonthDates = $thisMonthDates->shuffle()->take(10);
+            $selectedLastMonthDates = $lastMonthDates->shuffle()->take(10);
+
+            foreach ($selectedThisMonthDates as $date) {
+                $attendance = Attendance::factory()->create([
+                    'user_id' => $user->id,
+                    'date' => $date,
+                ]);
+                BreakTime::factory()->forAttendance($attendance)->create();
+            }
+
+            foreach ($selectedLastMonthDates as $date) {
+                $attendance = Attendance::factory()->create([
+                    'user_id' => $user->id,
+                    'date' => $date,
+                ]);
+                BreakTime::factory()->forAttendance($attendance)->create();
+            }
+            /*$dates = collect();
 
             for ($i = 0; $i < 10; $i++) {
                 do {
@@ -54,7 +86,7 @@ class DatabaseSeeder extends Seeder
                 ]);
 
                 BreakTime::factory()->forAttendance($attendance)->create();
-            }
+            }*/
         }
     }
 }
