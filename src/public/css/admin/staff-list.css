@@ -3,6 +3,13 @@
     margin: 70px auto;
 }
 
+@media (max-width: 850px) and (min-width: 768px) {
+    .staff-list-container {
+        width: 85vw;
+        margin: 50px auto;
+    }
+}
+
 .list-heading {
     font-size: 30px;
     font-weight: 700;
@@ -30,6 +37,12 @@
     letter-spacing: 0.15em;
 }
 
+@media (max-width: 850px) and (min-width: 768px) {
+    .staff-table {
+        margin-top: 40px;
+    }
+}
+
 .staff-table__inner {
     width: 100%;
     table-layout: fixed;
@@ -37,6 +50,12 @@
 
 .staff-table__row {
     line-height: 2.5;
+}
+
+@media (max-width: 850px) and (min-width: 768px) {
+    .staff-table__row {
+        line-height: 2.8;
+    }
 }
 
 .staff-table__row:not(:last-of-type) {
@@ -53,6 +72,12 @@
 
 .staff-table__header:not(:nth-of-type(2)) {
     width: 30%;
+}
+
+@media (max-width: 850px) and (min-width: 768px) {
+    .staff-table__header:not(:nth-of-type(2)) {
+        width: 26%;
+    }
 }
 
 .staff-table__btn {
