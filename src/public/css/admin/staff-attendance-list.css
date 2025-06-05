@@ -134,3 +134,27 @@
     text-decoration: none;
     color: #000;
 }
+
+.csv-export-btn {
+    display: block;
+    text-decoration: none;
+    align-content: center;
+    text-align: center;
+    justify-self: end;
+    width: 19%;
+    height: 50px;
+    margin-top: 50px;
+    color: #FFF;
+    background-color: #000;
+    border-radius: 5px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+}
+
+@media (max-width: 850px) and (min-width: 768px) {
+    .csv-export-btn {
+        font-size: 18px;
+    }
+}
