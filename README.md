@@ -12,12 +12,13 @@
 ## メール認証（Mailtrap）
 メール認証機能に **Mailtrap** を使用しています。\
 開発環境では以下の手順で設定を行ってください。
-1. [Mailtrap](https://mailtrap.io/)に登録・ログイン\サイドバーの Inboxes から My Inbox を開く
+1. [Mailtrap](https://mailtrap.io/)に登録・ログイン
+* サイドバーの Inboxes から My Inbox を開く
 2. Integrations で「**laravel 7.x and 8.x**」を選択\
-`.env`ファイルの`MAIL`セクションにコピー&ペースト
+* `.env`ファイルの`MAIL`セクションにコピー&ペースト
 
 ```
-# .envファイルのメール設定例
+.envファイルのメール設定例
 
 MAIL_MAILER=smtp # この部分からペースト
 MAIL_HOST=sandbox.smtp.mailtrap.io
