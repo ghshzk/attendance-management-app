@@ -37,4 +37,15 @@
     font-size: 20px;
     font-weight: 400;
     margin-top: 25px;
+    cursor: pointer;
+}
+
+.break {
+    display: none;
+}
+
+@media (max-width: 850px) and (min-width: 768px) {
+    .break {
+        display: block;
+    }
 }

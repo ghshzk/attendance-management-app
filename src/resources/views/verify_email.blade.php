@@ -8,7 +8,7 @@
 <div class="verification-container">
     <div class="verification-content">
         <p class="verification-content__message">
-            登録していただいたメールアドレスに認証メールを送付しました。<br>
+            登録していただいたメールアドレスに<span class="break"></span>認証メールを送付しました。<br>
             メール認証を完了してください。
         </p>
     </div>
