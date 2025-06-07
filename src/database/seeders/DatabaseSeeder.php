@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             $thisMonthDates = collect();
             $startOfMonth = now()->startOfMonth();
 
-            for ($i = 0; $i < now()->day; $i++) {
+            for ($i = 0; $i < now()->day -1; $i++) {
                 $thisMonthDates->push($startOfMonth->copy()->addDays($i)->format('Y-m-d'));
             }
 
