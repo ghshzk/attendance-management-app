@@ -1,7 +1,17 @@
 # 📝 勤怠管理アプリ
 ## 🛠 環境構築
+### Dockerビルド
 1. git clone git@github.com:ghshzk/attendance-management-app.git
-2. Dockerを起動する
+2. docker-compose up -d --build
+
+### Laravel環境構築
+1. docker-compose exec php bash
+2. composer install
+3. cp .env.example .env
+4. .envファイルの環境変数を変更
+5. php artisan key:generate
+6. php artisan migrate
+7. php artisan db:seed
 
 ## 💻 使用技術
 - Laravel 8
@@ -17,14 +27,14 @@
 ```
 .envファイルのメール設定例
 
-MAIL_MAILER=smtp # この部分からペースト
+MAIL_MAILER=smtp
 MAIL_HOST=sandbox.smtp.mailtrap.io
 MAIL_PORT=2525
 MAIL_USERNAME=xxxxxxxxxxxxxx
 MAIL_PASSWORD=xxxxxxxxxxxxxx
-MAIL_ENCRYPTION=tls # この部分まではコピーした内容
-MAIL_FROM_ADDRESS="test@example.com" # 送信元メールアドレス（任意）
-MAIL_FROM_NAME="${APP_NAME}" # 送信元名（任意）
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="test@example.com"   # 送信元メールアドレス（任意）
+MAIL_FROM_NAME="${APP_NAME}"   # 送信元名（任意）
 ```
 
 ## 📅 日付の選択と遷移
@@ -41,6 +51,7 @@ MAIL_FROM_NAME="${APP_NAME}" # 送信元名（任意）
 1. 日付が表示されている部分にある**カレンダーアイコン**をクリックします。
 2. 日付を選択するためのカレンダーが表示されるので、ここから特定の日付を選択すると、その日の勤怠一覧へ表示が切り替わります。
 3. また、日付の左右にある**矢印**をクリックすることで、1日単位で前後に表示を切り替えられます。
+
 
 ## 🗂 テーブル仕様
 #### usersテーブル
@@ -116,14 +127,14 @@ MAIL_FROM_NAME="${APP_NAME}" # 送信元名（任意）
 
 ## 🔑 テストアカウントのログイン情報
 ### 管理者ユーザー
-name: 管理者 ユーザー\
-email: admin@example.com\
-password: adminpass
+**name:** 管理者 ユーザー\
+**email:** admin@example.com\
+**password:** adminpass
 
 ### 一般ユーザー
-name: 山田 太郎\
-email: user1@example.com\
-password: password
+**name:** 山田 太郎\
+**email:** user1@example.com\
+**password:** password
 
 ## 🌐 URL
 - 開発環境: http://localhost/
