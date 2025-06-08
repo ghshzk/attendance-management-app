@@ -110,7 +110,7 @@ class CorrectionRequestTest extends TestCase
     //修正申請の承認処理が正しく行われる
     public function test_approve_correction_request_detail()
     {
-        $response = $this->actingAs($this->admin)->post(route('admin.approve.update', $this->pendingCorrection->id));
+        $response = $this->actingAs($this->admin)->put(route('admin.approve.update', $this->pendingCorrection->id));
 
         $response->assertStatus(302);
 

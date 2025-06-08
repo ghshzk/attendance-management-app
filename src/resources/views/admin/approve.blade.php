@@ -9,6 +9,7 @@
     <h3 class="approve-heading">勤怠詳細</h3>
     <form class="approve-form" action="{{ route('admin.approve.update', ['attendance_correct_request' => $pendingCorrection->id]) }}" method="post">
         @csrf
+        @method('PUT')
         <div class="approve-table">
             <table class="approve-table__inner">
                 <tr class="approve-table__row">

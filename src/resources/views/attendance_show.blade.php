@@ -9,6 +9,7 @@
     <h3 class="detail-heading">勤怠詳細</h3>
     <form class="detail-form" action="{{ route('attendance.update',['id' => $attendance->id]) }}" method="post">
         @csrf
+        @method('PUT')
         <div class="detail-table">
             <table class="detail-table__inner">
                 <tr class="detail-table__row">

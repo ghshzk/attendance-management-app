@@ -67,7 +67,7 @@ class AttendanceShowTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->get(route('admin.attendance.show', ['id' => $this->attendance->id]));
 
-        $postResponse = $this->actingAs($this->admin)->post(route('admin.attendance.update',['id' => $this->attendance->id]), [
+        $postResponse = $this->actingAs($this->admin)->put(route('admin.attendance.update',['id' => $this->attendance->id]), [
             'clock_in' => '19:00',
             'clock_out' => '18:00',
             'remark' => 'テスト修正',
@@ -84,7 +84,7 @@ class AttendanceShowTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->get(route('admin.attendance.show', ['id' => $this->attendance->id]));
 
-        $postResponse = $this->actingAs($this->admin)->post(route('admin.attendance.update',['id' => $this->attendance->id]), [
+        $postResponse = $this->actingAs($this->admin)->put(route('admin.attendance.update',['id' => $this->attendance->id]), [
             'clock_in' => '09:00',
             'clock_out' => '18:00',
             'break_start' => ['19:00'],
@@ -103,7 +103,7 @@ class AttendanceShowTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->get(route('admin.attendance.show', ['id' => $this->attendance->id]));
 
-        $postResponse = $this->actingAs($this->admin)->post(route('admin.attendance.update',['id' => $this->attendance->id]), [
+        $postResponse = $this->actingAs($this->admin)->put(route('admin.attendance.update',['id' => $this->attendance->id]), [
             'clock_in' => '09:00',
             'clock_out' => '18:00',
             'break_start' => ['17:00'],
@@ -122,7 +122,7 @@ class AttendanceShowTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->get(route('admin.attendance.show', ['id' => $this->attendance->id]));
 
-        $postResponse = $this->actingAs($this->admin)->post(route('admin.attendance.update',['id' => $this->attendance->id]), [
+        $postResponse = $this->actingAs($this->admin)->put(route('admin.attendance.update',['id' => $this->attendance->id]), [
             'clock_in' => '10:00',
             'clock_out' => '19:00',
             'break_start' => ['12:30'],

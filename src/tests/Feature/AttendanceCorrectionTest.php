@@ -51,7 +51,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_error_clock_in_after_clock_out()
     {
         $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
-        $response = $this->actingAs($this->user)->post(route('attendance.update', ['id' => $this->attendance->id]),[
+        $response = $this->actingAs($this->user)->put(route('attendance.update', ['id' => $this->attendance->id]),[
             'clock_in' => '19:00',
             'clock_out' => '18:00',
             'remark' => 'テスト修正',
@@ -67,7 +67,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_error_break_start_after_clock_out()
     {
         $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
-        $response = $this->actingAs($this->user)->post(route('attendance.update', ['id' => $this->attendance->id]),[
+        $response = $this->actingAs($this->user)->put(route('attendance.update', ['id' => $this->attendance->id]),[
             'clock_in' => '09:00',
             'clock_out' => '18:00',
             'break_start' => ['19:00'],
@@ -85,7 +85,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_error_break_end_after_clock_out()
     {
         $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
-        $response = $this->actingAs($this->user)->post(route('attendance.update', ['id' => $this->attendance->id]), [
+        $response = $this->actingAs($this->user)->put(route('attendance.update', ['id' => $this->attendance->id]), [
             'clock_in' => '09:00',
             'clock_out' => '18:00',
             'break_start' => ['17:00'],
@@ -103,7 +103,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_error_remark_empty()
     {
         $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
-        $response = $this->actingAs($this->user)->post(route('attendance.update', ['id' => $this->attendance->id]), [
+        $response = $this->actingAs($this->user)->put(route('attendance.update', ['id' => $this->attendance->id]), [
             'clock_in' => '09:00',
             'clock_out' => '18:00',
             'break_start' => ['12:00'],
@@ -121,7 +121,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_correction_request_success()
     {
         $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
-        $this->actingAs($this->user)->post(route('attendance.update', ['id' => $this->attendance->id]), [
+        $this->actingAs($this->user)->put(route('attendance.update', ['id' => $this->attendance->id]), [
             'clock_in' => '09:30',
             'clock_out' => '18:30',
             'break_start' => ['12:15'],
@@ -145,7 +145,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_correction_request_list_pending()
     {
         $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
-        $this->actingAs($this->user)->post(route('attendance.update', ['id' => $this->attendance->id]), [
+        $this->actingAs($this->user)->put(route('attendance.update', ['id' => $this->attendance->id]), [
             'clock_in' => '09:30',
             'clock_out' => '18:30',
             'break_start' => ['12:15'],
@@ -162,7 +162,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_correction_request_list_approved()
     {
         $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
-        $this->actingAs($this->user)->post(route('attendance.update', ['id' => $this->attendance->id]), [
+        $this->actingAs($this->user)->put(route('attendance.update', ['id' => $this->attendance->id]), [
             'clock_in' => '09:30',
             'clock_out' => '18:30',
             'break_start' => ['12:15'],
@@ -183,7 +183,7 @@ class AttendanceCorrectionTest extends TestCase
     public function test_correction_request_list_detail_show()
     {
         $this->actingAs($this->user)->get(route('attendance.show', ['id' => $this->attendance->id]));
-        $this->actingAs($this->user)->post(route('attendance.update', ['id' => $this->attendance->id]), [
+        $this->actingAs($this->user)->put(route('attendance.update', ['id' => $this->attendance->id]), [
             'clock_in' => '09:30',
             'clock_out' => '18:30',
             'break_start' => ['12:15'],

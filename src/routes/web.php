@@ -53,14 +53,14 @@ Route::middleware(['auth'])->group(function(){
     //管理者ユーザー
     Route::get('/admin/attendance/list', [AdminAttendanceListController::class,'index'])->name('admin.attendance.index');
     Route::get('/admin/attendance/{id}', [AdminAttendanceListController::class,'show'])->name('admin.attendance.show');
-    Route::post('/admin/attendance/{id}', [AdminAttendanceListController::class,'update'])->name('admin.attendance.update');
+    Route::put('/admin/attendance/{id}', [AdminAttendanceListController::class,'update'])->name('admin.attendance.update');
 
     Route::get('/admin/staff/list', [StaffListController::class,'index'])->name('admin.staff.index');
     Route::get('/admin/staff/{id}', [StaffListController::class,'staffIndex'])->name('admin.staff.attendance');
     Route::get('/admin/staff/{id}/csv', [StaffListController::class,'exportCsv'])->name('admin.staff.attendance.csv');
 
     Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AdminCorrectionRequestController::class, 'show'])->name('admin.approve.show');
-    Route::post('/stamp_correction_request/approve/{attendance_correct_request}', [AdminCorrectionRequestController::class, 'update'])->name('admin.approve.update');
+    Route::put('/stamp_correction_request/approve/{attendance_correct_request}', [AdminCorrectionRequestController::class, 'update'])->name('admin.approve.update');
 
 
     //一般ユーザー
@@ -72,7 +72,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('/attendance/list', [AttendanceListController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/{id}', [AttendanceListController::class, 'show'])->name('attendance.show');
-    Route::post('/attendance/{id}', [AttendanceListController::class, 'update'])->name('attendance.update');
+    Route::put('/attendance/{id}', [AttendanceListController::class, 'update'])->name('attendance.update');
 
     //一般ユーザー・管理者ユーザー共通
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index'])->name('correction.index');
