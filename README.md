@@ -9,9 +9,16 @@
 2. composer install
 3. cp .env.example .env
 4. .envファイルの環境変数を変更
+```
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+```
 5. php artisan key:generate
-6. php artisan migrate
-7. php artisan db:seed
+6. php artisan migrate:fresh --seed
 
 ## 💻 使用技術
 - Laravel 8
@@ -22,19 +29,18 @@
 ## 📧 メール認証（Mailtrap）
 メール認証機能に **Mailtrap** を使用しています。開発環境では以下の手順で設定を行ってください。
 1. [Mailtrap](https://mailtrap.io/)に登録・ログイン、サイドバーの Inboxes から My Inbox を開く
-2. Integrations で「**laravel 7.x and 8.x**」を選択し、`.env`ファイルの`MAIL`セクションにコピー&ペースト
+2. Integrations で「**laravel 7.x and 8.x**」を選択し、表示されるコードをコピーして、`.env`ファイルの`MAIL`セクションにペースト
+MAIL_FROM_ADDRESSは任意のメールアドレス、MAIL_FROM_NAMEは任意の名前を入力。
 
 ```
-.envファイルのメール設定例
-
 MAIL_MAILER=smtp
 MAIL_HOST=sandbox.smtp.mailtrap.io
 MAIL_PORT=2525
 MAIL_USERNAME=xxxxxxxxxxxxxx
 MAIL_PASSWORD=xxxxxxxxxxxxxx
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="test@example.com"   # 送信元メールアドレス（任意）
-MAIL_FROM_NAME="${APP_NAME}"   # 送信元名（任意）
+MAIL_FROM_ADDRESS="test@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
 ```
 
 ## 📅 日付の選択と遷移
@@ -135,6 +141,19 @@ MAIL_FROM_NAME="${APP_NAME}"   # 送信元名（任意）
 **name:** 山田 太郎\
 **email:** user1@example.com\
 **password:** password
+
+## ✅ PHPUnitを利用したテストについて
+###　テスト用のデータベースの作成
+1. docker-compose exec mysql bash
+2. mysql -u root -p
+パスワードはrootと入力（docker-compose.ymlファイルに設定されているMySQLのrootパスワード）
+3. CREATE DATABASE demo_test;
+
+### テストの実行方法
+1. docker-compose exec php bash
+2. php artisan migrate:fresh --env=testing
+3. php artisan test または ./vendor/bin/phpunit
+
 
 ## 🌐 URL
 - 開発環境: http://localhost/
