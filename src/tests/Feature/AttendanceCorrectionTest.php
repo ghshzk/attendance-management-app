@@ -94,8 +94,10 @@ class AttendanceCorrectionTest extends TestCase
         ]);
 
         $response->assertStatus(302);
+        //休憩開始・終了どちらが勤務時間外でも、バリデーションメッセージは開始時間の方にまとめて表示する仕様
+        //デザイン上、エラーメッセージを１箇所に集約するため
         $response->assertSessionHasErrors([
-            'break_end.0' => '休憩時間が勤務時間外です',
+            'break_start.0' => '休憩時間が勤務時間外です',
         ]);
     }
 
