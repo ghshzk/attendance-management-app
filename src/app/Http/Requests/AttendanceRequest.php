@@ -77,11 +77,12 @@ class AttendanceRequest extends FormRequest
                         $validator->errors()->add("break_start.$index", '休憩開始時間もしくは休憩終了時間が不適切な値です');
                     }
 
-                    if (($clockIn && $start < $clockIn) || ($clockOut && $start > $clockOut)) {
+                    //どちらかが勤務時間外ならまとめてエラー表示
+                    if (
+                        ($clockIn && ($start < $clockIn || $end < $clockIn)) ||
+                        ($clockOut && ($start > $clockOut || $end > $clockOut))
+                    ) {
                         $validator->errors()->add("break_start.$index", '休憩時間が勤務時間外です');
-                    }
-                    if(($clockIn && $end < $clockIn) || ($clockOut && $end > $clockOut)) {
-                        $validator->errors()->add("break_end.$index", '休憩時間が勤務時間外です');
                     }
                 }
             }
