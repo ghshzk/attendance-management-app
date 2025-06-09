@@ -117,8 +117,7 @@ class BreakTest extends TestCase
     //休憩時刻が勤怠一覧画面で確認できる
     public function test_break_time_attendance_list()
     {
-        $this->actingAs($this->user);
-        $this->post(route('attendance.breakStart'));
+        $this->actingAs($this->user)->post(route('attendance.breakStart'));
 
         Carbon::setTestNow(Carbon::now()->addMinutes(60));
         $this->post(route('attendance.breakEnd'));
